@@ -10,8 +10,8 @@
 
         public function displayGeneros($generos){
             $smarty = new Smarty();
-            $smarty->assign('titulo',"MoviePlus_Generos");
-            $smarty->assign('URL_GENEROS_ADMIN',URL_GENEROS_ADMIN);
+            $smarty->assign('titulo',"Generos");
+            $smarty->assign('URL_GENEROS',URL_GENEROS);
             $smarty->assign('generos',$generos);
             $smarty->display('templates/ver_generos.tpl');
         }
@@ -32,7 +32,7 @@
 
         public function displayModificarGenero($genero) {
             $smarty = new Smarty();
-            $smarty->assign('titulo','MoviePlus_Modificar_Genero');
+            $smarty->assign('titulo','Modificar_Genero');
             $smarty->assign('BASE_URL',BASE_URL);
             $smarty->assign('genero',$genero);
             $smarty->display('templates/modificar_genero.tpl');

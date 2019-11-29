@@ -9,7 +9,7 @@
         </select>
         <input type="text" REQUIRED name="nombre" placeholder="Nombre:"> <br><br>
         <textarea name="descripcion" rows="10" cols="40" placeholder="Descripcion:"></textarea> <br><br>
-        <input type="file" REQUIRED name="image"> <br><br>
+        <input type="file" REQUIRED name="image[]" multiple> <br><br>
         <input type="submit" value="Aceptar">
     </form>
 </center>

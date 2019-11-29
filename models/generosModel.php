@@ -29,8 +29,13 @@
             $query->execute(array($nombre));
         }
 
-        public function eliminarGenero($id) {
+        public function eliminarGeneroConPeliculas($id) {
             $query = $this->db->prepare('DELETE generos, peliculas FROM generos INNER JOIN peliculas ON peliculas.id_genero = generos.id_genero WHERE generos.id_genero = ?');
+            $query->execute(array($id));
+        }
+
+        public function eliminarGenero($id) {
+            $query = $this->db->prepare('DELETE FROM generos WHERE id_genero = ?');
             $query->execute(array($id));
         }
 

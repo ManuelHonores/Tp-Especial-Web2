@@ -10,7 +10,7 @@
             $query = $this->db->prepare('SELECT * FROM peliculas');
             if($ordenar)
             {
-                $query = $this->db->prepare('SELECT peliculas.id_pelicula, peliculas.id_genero, peliculas.nombre, peliculas.descripcion, peliculas.image FROM peliculas, generos WHERE peliculas.id_genero = generos.id_genero order by generos.nombre');
+                $query = $this->db->prepare('SELECT peliculas.id_pelicula, peliculas.id_genero, peliculas.nombre, peliculas.descripcion FROM peliculas, generos WHERE peliculas.id_genero = generos.id_genero order by generos.nombre');
             }
             $ok = $query->execute();
             if (!$ok){
@@ -21,9 +21,11 @@
             return $pelis;
         }
 
-        public function insertarPelicula($id_genero, $nombre, $descripcion, $image) {
-            $query = $this->db->prepare('INSERT INTO peliculas(id_genero, nombre, descripcion, image) VALUES(?,?,?,?)');
-            $ok = $query->execute(array($id_genero,$nombre, $descripcion, $image));
+        public function insertarPelicula($id_genero, $nombre, $descripcion) {
+            $query = $this->db->prepare('INSERT INTO peliculas(id_genero, nombre, descripcion) VALUES(?,?,?)');
+            $ok = $query->execute(array($id_genero,$nombre, $descripcion));
+
+            return $this->db->lastInsertId();
         }
 
         public function getPeliculaId($id) {
@@ -38,8 +40,8 @@
             $query->execute(array($id));
         }
 
-        public function actualizarPelicula($id, $id_genero, $nombre, $descripcion, $image){
-            $query =  $this->db->prepare("UPDATE peliculas SET id_genero = ?, nombre = ?, descripcion = ?, image = ? WHERE id_pelicula=?");
-            $query->execute(array($id_genero, $nombre, $descripcion, $image, $id));
+        public function actualizarPelicula($id, $id_genero, $nombre, $descripcion){
+            $query =  $this->db->prepare("UPDATE peliculas SET id_genero = ?, nombre = ?, descripcion = ? WHERE id_pelicula=?");
+            $query->execute(array($id_genero, $nombre, $descripcion, $id));
         }
     }

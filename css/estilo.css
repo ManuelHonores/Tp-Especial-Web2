@@ -28,3 +28,7 @@ img {
   margin:auto;
   width: 60%;
 }
+
+#centrar {
+  text-align: center;
+}

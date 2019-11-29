@@ -2,6 +2,8 @@
     require_once('controllers/peliculasController.php');
     require_once('controllers/generosController.php');
     require_once('controllers/userController.php');
+    require_once('controllers/imagenesController.php');
+    require_once('controllers/resetController.php');
     
     $action = $_GET["action"];
 
@@ -10,12 +12,14 @@
     define("URL_LOGIN", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/login');
     define("URL_LOGOUT", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/logout');
     define("URL_INSERT", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/insertar');
-    define("URL_PELIS_ADMIN", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/peliculas_admin');
-    define("URL_GENEROS_ADMIN", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/generos_admin');
+    define("URL_GENEROS", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/generos');
+    define("URL_USUARIOS", 'http://'.$_SERVER["SERVER_NAME"].':'.$_SERVER["SERVER_PORT"].dirname($_SERVER["PHP_SELF"]).'/usuarios');
 
     $peliculasController = new PeliculasController();
     $generosController = new GenerosController();
     $userController = new UserController();
+    $imagenesController = new ImagenesController();
+    $resetController = new ResetController();
 
     if($action == ''){
         $peliculasController->showPeliculas();
@@ -65,6 +69,24 @@
                 $generosController->modificarGenero();
             }else if ($partesURL[0]=='borrarGenero') {
                 $generosController->borrarGenero($partesURL[1]);
+            }else if ($partesURL[0]=='borrar_usuario') {
+                $userController->eliminar($partesURL[1]);
+            }else if ($partesURL[0]=='modificar_usuario') {
+                $userController->changeAttribute($partesURL[1], $partesURL[2]);
+            }else if ($partesURL[0]=='usuarios') {
+                $userController->displayUsuarios();
+            }else if ($partesURL[0]=='recuperar') {
+                $userController->displayRecuperar();
+            }else if ($partesURL[0]=='recuperarPass') {
+                $userController->userRecuperar();
+            }else if ($partesURL[0]=='borrarImagen') {
+                $imagenesController->deleteImagen($partesURL[1], $partesURL[2]);
+            }else if ($partesURL[0]=='agregarImagen') {
+                $imagenesController->datosImagen();
+            }else if ($partesURL[0]=='restablecer') {
+                $resetController->restablecer();
+            }else if ($partesURL[0]=='cambioPass') {
+                $userController->cambiarPass();
             }
         }   
     }    

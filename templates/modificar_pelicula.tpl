@@ -7,10 +7,10 @@
                 <option value="{$genero->id_genero}" name="id_genero">{$genero->nombre}</option>
             {/foreach}
         </select>
-        <input type="text" REQUIRED name="nombre" placeholder="Nombre:{$pelicula->nombre}">
-        <input type="text" name="id" readonly="readonly" value="{$pelicula->id_pelicula}"> <br><br>
-        <textarea name="descripcion" rows="10" cols="40" placeholder="Descripcion:{$pelicula->descripcion}"></textarea> <br><br>
-        <input type="file" REQUIRED name="image"> <br><br>
+        <input type="text" REQUIRED name="nombre" value="{$pelicula->nombre}">
+        <input type="text" name="id" readonly="readonly" hidden value="{$pelicula->id_pelicula}"> <br><br>
+        <textarea name="descripcion" rows="10" cols="40" value="{$pelicula->descripcion}"> {$pelicula->descripcion} </textarea> <br><br>
+        <input type="file" REQUIRED name="image[]" multiple> <br><br>
         <input type="submit" value="Aceptar">
     </form>
 </center>

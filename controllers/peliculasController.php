@@ -2,6 +2,7 @@
     require_once('./views/peliculasView.php');
     require_once('./models/peliculasModel.php');
     require_once('./controllers/userController.php');
+    require_once('./controllers/imagenesController.php');
 
     class PeliculasController{
         private $viewPeliculas;
@@ -13,6 +14,9 @@
         //Tengo que crear variable para controlar el login
         private $controllerUser;
 
+        //Variable del controller imagenes
+        private $controllerImagenes;
+
         public function __construct(){
             $this->viewPeliculas = new PeliculasView();
             $this->modelPeliculas = new PeliculasModel();
@@ -21,14 +25,19 @@
 
             $this->controllerUser = new UserController();
 
+            $this->controllerImagenes = new ImagenesController();
         }
     
         public function showPeliculas(){
+            session_start();
             $ordenar = isset($_GET['ordenar']);
+
+            $imagenes = $this->controllerImagenes->getImagenes();
+
             $pelis = $this->modelPeliculas->getPeliculas($ordenar);
             $generos = $this->modelGeneros->getGeneros();
             //Envío peliculas y generos y despues en el template, comparo id y muestro nombre
-            $this->viewPeliculas->displayPeliculas($pelis, $generos);   
+            $this->viewPeliculas->displayPeliculas($pelis, $generos, $imagenes);   
         }
 
         public function formularioNuevaPeli(){
@@ -42,40 +51,37 @@
             $id_gen = $_POST['taskOption'];
             $nombre = $_POST['nombre'];
             $descripcion = $_POST['descripcion'];
-            $imagen = (file_get_contents($_FILES['image']['tmp_name']));
-            //move_uploaded_file esto vamos a usar para guardar las imagenes
 
-            $this->modelPeliculas->insertarPelicula($id_gen,$nombre,$descripcion,$imagen);
-            header("Location: " . URL_PELIS_ADMIN);
+            $lastId = $this->modelPeliculas->InsertarPelicula($id_gen, $nombre, $descripcion);
 
+            $this->controllerImagenes->agregarImagenes($_FILES['image'], $lastId);
+            header("Location: " . URL_PELIS);
         }
+    
 
         //Funcion para mostrar la info de vermas peli
         public function verMas($id) {
-            if($id == 6) {
+
+            $imagenes = $this->controllerImagenes->getImagenesIdPeli($id);
+
+            session_start();
+            if($id == 65) {
                 //EasterEgg
                 $this->viewPeliculas->displayEasterEgg();
             } else {
                 $peli = $this->modelPeliculas->getPeliculaId($id);
                 $genero = $this->modelGeneros->getGeneroId($peli->id_genero);
-                $this->viewPeliculas->DisplayVerMas($peli, $genero);
+                $this->viewPeliculas->DisplayVerMas($peli, $genero, $imagenes);
             }
-        }
-
-
-        //Para el Administrador
-        public function showPeliculasAdmin(){
-            $this->controllerUser->checkLogIn();
-            $pelis = $this->modelPeliculas->getPeliculas();
-            $generos = $this->modelGeneros->getGeneros();
-            //Envío peliculas y generos y despues en el template, comparo id y muestro nombre
-            $this->viewPeliculas->displayPeliculasAdmin($pelis, $generos);
         }
 
         public function borrarPelicula($id){
             $this->controllerUser->checkLogIn();
             $this->modelPeliculas->borrarPelicula($id);
-            header("Location: " . URL_PELIS_ADMIN);
+ 
+            $this->controllerImagenes->deleteImgPeli($id);
+
+            header("Location: " . URL_PELIS);
         }
 
         public function displayFormularioModificar($id){
@@ -93,10 +99,10 @@
             $id_gen = $_POST['taskOption'];
             $nombre = $_POST['nombre'];
             $descripcion = $_POST['descripcion'];
-            $imagen = (file_get_contents($_FILES['image']['tmp_name']));
-            //move_uploaded_file esto vamos a usar para guardar las imagenes
+        
+            $this->controllerImagenes->agregarImagenes($_FILES['image'], $id_peli);
 
-            $this->modelPeliculas->actualizarPelicula($id_peli, $id_gen, $nombre, $descripcion, $imagen);
-            header("Location: " . URL_PELIS_ADMIN);
+            $this->modelPeliculas->actualizarPelicula($id_peli, $id_gen, $nombre, $descripcion);
+            header("Location: " . URL_PELIS);
         }
     }

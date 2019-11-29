@@ -9,12 +9,13 @@ class PeliculasView {
 
     }
 
-    public function displayPeliculas($peliculas, $generos){
+    public function displayPeliculas($peliculas, $generos, $imagenes){
         $smarty = new SmartyBC();
         $smarty->assign('titulo',"MoviePlus");
         $smarty->assign('BASE_URL',BASE_URL);
         $smarty->assign('peliculas',$peliculas);
         $smarty->assign('generos',$generos);
+        $smarty->assign('imagenes',$imagenes);
         $smarty->display('templates/ver_peliculas.tpl');
     }
 
@@ -26,12 +27,13 @@ class PeliculasView {
         $smarty->display('templates/form_nueva_pelicula.tpl');
     }
 
-    public function DisplayVerMas($pelicula, $genero) {
+    public function DisplayVerMas($pelicula, $genero, $imagenes) {
         $smarty = new SmartyBC();
         $smarty->assign('titulo', 'Info');
         $smarty->assign('BASE_URL',BASE_URL);
         $smarty->assign('pelicula', $pelicula);
         $smarty->assign('genero', $genero);
+        $smarty->assign('imagenes', $imagenes);
         $smarty->display('templates/ver_mas_pelicula.tpl');
     }
 
